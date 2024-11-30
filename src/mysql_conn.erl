@@ -538,7 +538,7 @@ do_execute(State, Name, Params, ExpectedVersion) ->
     end.
 
 prepare_and_exec(State, Name, Version, Stmt, Params) ->
-    NameBin = atom_to_binary(Name),
+    NameBin = atom_to_binary2(Name),
     StmtBin = <<"PREPARE ", NameBin/binary, " FROM '",
 		Stmt/binary, "'">>,
     case do_query(State, StmtBin) of
@@ -559,13 +559,13 @@ do_execute1(State, Name, Params) ->
     do_queries(State, Stmts).
 
 make_statements_for_execute(Name, []) ->
-    NameBin = atom_to_binary(Name),
+    NameBin = atom_to_binary2(Name),
     [<<"EXECUTE ", NameBin/binary>>];
 make_statements_for_execute(Name, Params) ->
     NumParams = length(Params),
     ParamNums = lists:seq(1, NumParams),
 
-    NameBin = atom_to_binary(Name),
+    NameBin = atom_to_binary2(Name),
     
     ParamNames =
 	lists:foldl(
@@ -591,7 +591,7 @@ make_statements_for_execute(Name, Params) ->
 	       end, [ExecStmt], lists:reverse(ParamVals)),
     Stmts.
 
-atom_to_binary(Val) ->
+atom_to_binary2(Val) ->
     <<_:4/binary, Bin/binary>> = term_to_binary(Val),
     Bin.
 
